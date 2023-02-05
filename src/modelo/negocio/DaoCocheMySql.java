@@ -1,4 +1,4 @@
-package modelo.persistencia;
+package modelo.negocio;
 
 public class DaoCocheMySql {
 
