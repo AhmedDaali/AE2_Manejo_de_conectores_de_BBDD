@@ -26,7 +26,7 @@ public interface DaoPasajero {
 	 * @param id del pasajero a obtener.
 	 * @return pasajero solicitado
 	 */
-	Pasajero getPasajero(int id);
+	Pasajero obtenerPasajero(int id);
 	/**
 	 * Método que obtiene la lista de pasajeros en la BBDD.
 	 * @param no necsita parámetro.
@@ -34,27 +34,26 @@ public interface DaoPasajero {
 	 */
 	List<Pasajero> listPasajeros();
 	/**
-	 * Método que añade un pasajero a un coche en la BBDD por el id de cada uno .
-	 * @param id del pasajero a añadir al coche.
-	 * @param  idCoche, id del coche que al que se le va añadir el pasajero
+	 * Método que añade un coche a un pasajero en la BBDD por id.
+	 * Antes muestra la lista de coches para eligir.
+	 * @param p el pasajero a añadir al coche.
 	 * @return true en caso de que se haya añadido. False en caso de error
 	 * con la BBDD.
 	 */
-	boolean addPasajeroCoche(int id,int idCoche);
+	boolean addPasajeroCoche(Pasajero p);
 	/**
-	 * Método que elimina un pasajero a un coche en la BBDD por el id de cada uno .
-	 * @param id del pasajero a borrar del coche.
-	 * @param  idCoche, id del coche que al que se le va eliminar el pasajero
+	 * Método que elimina un coche a un pasajero en la BBDD por el id de cada uno .
+	 * @param p el pasajero a quien hay que borrar el coche.
 	 * @return true en caso de que se haya eliminado. False en caso de error
 	 * con la BBDD.
 	 */
-	boolean deletePasajeroCoche(int id,Pasajero idCoche);
+	boolean deletePasajeroCoche(Pasajero p);
 	/**
 	 * Método que obtiene la lista de pasajeros de un coche en la BBDD 
 	 * mediate el id del coche.
 	 * @param idCoche, id del coche al que queremos ver sus pasajeros.
 	 * @return lista de pasajeros de un coche.
 	 */
-	List<Pasajero> listPasajeros(int idCoche);
+	List<Pasajero> listPasajerosCoche(int idCoche);
 
 }

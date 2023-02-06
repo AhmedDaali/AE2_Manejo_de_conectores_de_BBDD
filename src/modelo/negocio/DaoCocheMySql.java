@@ -46,13 +46,14 @@ public class DaoCocheMySql implements DaoCoche {
 		}
 		boolean alta = true;
 		
-		String query = "insert into coche (id, matricula, modelo, color) "
+		String query = "insert into coche ( matricula, marca, modelo, color) "
 				+ " values(?,?,?,?)";
 		try {
 			//preparamos la query con valores parametrizables(?)
 			PreparedStatement ps = conexion.prepareStatement(query);
-			ps.setInt(1, c.getId());
-			ps.setString(2, c.getMatricula());
+			//ps.setInt(1, c.getId());
+			ps.setString(1, c.getMatricula());
+			ps.setString(2, c.getMarca());
 			ps.setString(3, c.getModelo());
 			ps.setString(4, c.getColor());
 			
@@ -108,14 +109,14 @@ public class DaoCocheMySql implements DaoCoche {
 			return false;
 		}
 		boolean modificado = true;
-		String query = "UPDATE coche SET matricula=?, modelo=?, color=?  "
-				+ " WHERE id=?";
+		String query = "UPDATE coche SET matricula=?, marca=?, modelo=?, color=? WHERE id=?";
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
 			ps.setString(1, c.getMatricula());
-			ps.setString(2, c.getModelo());
-			ps.setString(3, c.getColor());
-			ps.setInt(4, c.getId());
+			ps.setString(2, c.getMarca());
+			ps.setString(3, c.getModelo());
+			ps.setString(4, c.getColor());
+			ps.setInt(5, c.getId());
 			
 			int numeroFilasAfectadas = ps.executeUpdate();
 			if(numeroFilasAfectadas == 0)
@@ -141,7 +142,7 @@ public class DaoCocheMySql implements DaoCoche {
 		}		
 		Coche coche = null;
 		
-		String query = "SELECT id,matricula,modelo,color FROM coche "
+		String query = "SELECT id,matricula,marca,modelo,color FROM coche "
 				+ "WHERE id = ?";
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
@@ -152,10 +153,11 @@ public class DaoCocheMySql implements DaoCoche {
 				coche = new Coche();
 				coche.setId(rs.getInt(1));
 				coche.setMatricula(rs.getString(2));
-				coche.setModelo(rs.getString(3));
-				coche.setColor(rs.getString(4));
+				coche.setMarca(rs.getString(3));
+				coche.setModelo(rs.getString(4));
+				coche.setColor(rs.getString(5));
 			}
-			System.out.println(coche+"\n");
+			//System.out.println(coche+"\n");
 		} catch (SQLException e) {
 			System.out.println("obtener -> error al obtener el "
 					+ "coche con id " + id);
@@ -175,7 +177,7 @@ public class DaoCocheMySql implements DaoCoche {
 		}		
 		List<Coche> listaCoches = new ArrayList<>();
 		
-		String query = "SELECT id,matricula, modelo,color FROM coche";
+		String query = "SELECT id,matricula, marca,modelo,color FROM coche";
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
 			
@@ -185,8 +187,9 @@ public class DaoCocheMySql implements DaoCoche {
 				Coche coche = new Coche();
 				coche.setId(rs.getInt(1));
 				coche.setMatricula(rs.getString(2));
-				coche.setModelo(rs.getString(3));
-				coche.setColor(rs.getString(4));
+				coche.setMarca(rs.getString(3));
+				coche.setModelo(rs.getString(4));
+				coche.setColor(rs.getString(5));
 				
 				listaCoches.add(coche);	
 			}

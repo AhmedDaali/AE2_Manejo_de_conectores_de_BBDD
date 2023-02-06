@@ -18,6 +18,9 @@ public class Pasajero {
 		
 		this.idCoche = idCoche;
 	}
+	public Pasajero() {
+		
+	}
 
 	public int getId() {
 		return id;
@@ -70,7 +73,7 @@ public class Pasajero {
 	@Override
 	public String toString() {
 		return "Pasajero [id=" + id + ", nombre=" + nombre + ", edad=" + edad + ", peso=" + peso + ", idCoche="
-				+ idCoche + ", coche=" + coche + "]";
+				+ idCoche + "]";
 	}
 
 	
