@@ -1,10 +1,206 @@
 package modelo.negocio;
 
-public class DaoCocheMySql {
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+import modelo.entidad.Coche;
+import modelo.persistencia.interfaces.DaoCoche;
 
+public class DaoCocheMySql implements DaoCoche {
+
+
+	private Connection conexion;
+	
+	public boolean abrirConexion(){
+		String url = "jdbc:mysql://localhost:3306/ae2";
+		String usuario = "root";
+		String password = "";
+		try {
+			conexion = DriverManager.getConnection(url,usuario,password);
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	public boolean cerrarConexion(){
+		try {
+			conexion.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean addCoche(Coche c) {
+		if(!abrirConexion()){
+			return false;
+		}
+		boolean alta = true;
+		
+		String query = "insert into coche (id, matricula, modelo, color) "
+				+ " values(?,?,?,?)";
+		try {
+			//preparamos la query con valores parametrizables(?)
+			PreparedStatement ps = conexion.prepareStatement(query);
+			ps.setInt(1, c.getId());
+			ps.setString(2, c.getMatricula());
+			ps.setString(3, c.getModelo());
+			ps.setString(4, c.getColor());
+			
+			
+			int numeroFilasAfectadas = ps.executeUpdate();
+			if(numeroFilasAfectadas == 0)
+				alta = false;
+			System.out.println("Coche añadido\n");
+		} catch (SQLException e) {
+			System.out.println("alta -> Error al insertar: " + c);
+			alta = false;
+			e.printStackTrace();
+		} finally{
+			cerrarConexion();
+		}
+		
+		return alta;
+		
+	}
+
+	@Override
+	public boolean deleteCoche(int id) {
+		if(!abrirConexion()){
+			return false;
+		}
+		
+		boolean borrado = true;
+		String query = "DELETE FROM coche WHERE id = ?";
+		try {
+			PreparedStatement ps = conexion.prepareStatement(query);
+			//sustituimos la primera interrgante por la id
+			ps.setInt(1, id);
+			
+			int numeroFilasAfectadas = ps.executeUpdate();
+			if(numeroFilasAfectadas == 0)
+				borrado = false;
+			System.out.println("Coche borrado \n");
+			
+		} catch (SQLException e) {
+			borrado = false;
+			System.out.println("baja -> No se ha podido dar de baja"
+					+ " el id " + id);
+			e.printStackTrace();
+		} finally {
+			cerrarConexion();
+		}
+		return borrado; 
+	}
+
+	@Override
+	public boolean updateCoche(Coche c) {
+		if(!abrirConexion()){
+			return false;
+		}
+		boolean modificado = true;
+		String query = "UPDATE coche SET matricula=?, modelo=?, color=?  "
+				+ " WHERE id=?";
+		try {
+			PreparedStatement ps = conexion.prepareStatement(query);
+			ps.setString(1, c.getMatricula());
+			ps.setString(2, c.getModelo());
+			ps.setString(3, c.getColor());
+			ps.setInt(4, c.getId());
+			
+			int numeroFilasAfectadas = ps.executeUpdate();
+			if(numeroFilasAfectadas == 0)
+				modificado = false;
+			System.out.println("El coche modificado: "+ c.toString()+"\n");
+		} catch (SQLException e) {
+			
+			System.out.println("modificar -> error al modificar el "
+					+ " coche " + c);
+			modificado = false;
+			e.printStackTrace();
+		} finally{
+			cerrarConexion();
+		}
+		
+		return modificado;
+	}
+
+	@Override
+	public Coche obtenerCoche(int id) {
+		if(!abrirConexion()){
+			return null;
+		}		
+		Coche coche = null;
+		
+		String query = "SELECT id,matricula,modelo,color FROM coche "
+				+ "WHERE id = ?";
+		try {
+			PreparedStatement ps = conexion.prepareStatement(query);
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				coche = new Coche();
+				coche.setId(rs.getInt(1));
+				coche.setMatricula(rs.getString(2));
+				coche.setModelo(rs.getString(3));
+				coche.setColor(rs.getString(4));
+			}
+			System.out.println(coche+"\n");
+		} catch (SQLException e) {
+			System.out.println("obtener -> error al obtener el "
+					+ "coche con id " + id);
+			e.printStackTrace();
+		} finally {
+			cerrarConexion();
+		}
+		
+		
+		return coche;
+	}
+
+	@Override
+	public List<Coche> ListCoches() {
+		if(!abrirConexion()){
+			return null;
+		}		
+		List<Coche> listaCoches = new ArrayList<>();
+		
+		String query = "SELECT id,matricula, modelo,color FROM coche";
+		try {
+			PreparedStatement ps = conexion.prepareStatement(query);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()){
+				Coche coche = new Coche();
+				coche.setId(rs.getInt(1));
+				coche.setMatricula(rs.getString(2));
+				coche.setModelo(rs.getString(3));
+				coche.setColor(rs.getString(4));
+				
+				listaCoches.add(coche);	
+			}
+			System.out.println(listaCoches+"\n");
+		} catch (SQLException e) {
+			System.out.println("listar -> error al obtener los "
+					+ "coches");
+			e.printStackTrace();
+		} finally {
+			cerrarConexion();
+		}
+		
+		
+		return listaCoches;
 	}
 
 }

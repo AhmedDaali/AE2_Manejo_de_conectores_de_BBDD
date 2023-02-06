@@ -32,7 +32,7 @@ public interface DaoCoche {
 	 * @param id del coche  a obtener.
 	 * @return Coche solicitado
 	 */
-	Coche getCoche(int id);
+	Coche obtenerCoche(int id);
 	/**
 	 * Método que obtiene la lista de coches en la BBDD.
 	 * @param no necsita parámetro.
