@@ -33,7 +33,7 @@ public class MenuPasajero {
 				
 				try {
 					int opcion = Integer.parseInt(sc.nextLine());
-					if(opcion<1 || opcion>7) {
+					if(opcion<1 || opcion>8) {
 						System.out.println("Opción no válida\n");
 					}else {
 				
@@ -77,7 +77,7 @@ public class MenuPasajero {
 							break;
 							
 						case 4:
-							System.out.println(dp.listPasajeros()+"\n");
+							dp.listPasajeros();
 							break;
 							
 						case 5:
@@ -87,7 +87,7 @@ public class MenuPasajero {
 							if(dp.obtenerPasajero(id)==null){
 								System.out.println("Este id del pasajero no existe en la base de datos\n");
 							}else {
-								System.out.println("Por favor, escoja el id del coche de la lista seguiente: ");
+								System.out.println("Por favor, escoja el id del coche de la lista seguiente: \n");
 								dc.ListCoches();
 								int idCoche = sc.nextInt();sc.nextLine();
 								

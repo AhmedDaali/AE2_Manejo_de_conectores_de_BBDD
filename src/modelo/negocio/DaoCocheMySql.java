@@ -201,9 +201,13 @@ public class DaoCocheMySql implements DaoCoche {
 				coche.setModelo(rs.getString(4));
 				coche.setColor(rs.getString(5));
 				
-				listaCoches.add(coche);	
+				listaCoches.add(coche);
+				
+			     }
+			for (Coche c : listaCoches) {
+				  System.out.println(c+"\n");
 			}
-			System.out.println(listaCoches+"\n");
+
 		} catch (SQLException e) {
 			System.out.println("listar -> error al obtener los "
 					+ "coches");

@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import modelo.entidad.Coche;
 import modelo.entidad.Pasajero;
 import modelo.persistencia.interfaces.DaoPasajero;
 
@@ -163,6 +164,9 @@ public class DaoPasajeroMySql implements DaoPasajero{
 				
 				listaPasajeros.add(pasajero);	
 			}
+			for (Pasajero p : listaPasajeros) {
+				  System.out.println(p+"\n");
+			}
 		} catch (SQLException e) {
 			System.out.println("listar -> error al obtener los pasajeros");
 			e.printStackTrace();
@@ -261,7 +265,10 @@ public class DaoPasajeroMySql implements DaoPasajero{
 				listaPasajeros.add(pasajero);	
 			}
 			System.out.println("Los pasajeros del coche con id: " + idCoche + "\n" );
-		    System.out.println(listaPasajeros+"\n");
+			for (Pasajero p : listaPasajeros) {
+				  System.out.println(p + "\n");
+			}
+
 		} catch (SQLException e) {
 			System.out.println("listar -> error al obtener los pasajeros");
 			e.printStackTrace();
