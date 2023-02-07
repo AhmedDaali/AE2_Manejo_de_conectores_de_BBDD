@@ -15,7 +15,6 @@ public class Pasajero {
 		this.nombre = nombre;
 		this.edad = edad;
 		this.peso = peso;
-		
 		this.idCoche = idCoche;
 	}
 	public Pasajero() {
