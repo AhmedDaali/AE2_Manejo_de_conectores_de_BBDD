@@ -16,6 +16,11 @@ public class DaoCocheMySql implements DaoCoche {
 
 	private Connection conexion;
 	
+	/**
+	 * Abre una conexión a la base de datos.
+	 * 
+	 * @return true si la conexión se abrió correctamente, false en caso contrario.
+	 */
 	public boolean abrirConexion(){
 		String url = "jdbc:mysql://localhost:3306/ae2";
 		String usuario = "root";
@@ -29,6 +34,11 @@ public class DaoCocheMySql implements DaoCoche {
 		}
 		return true;
 	}
+	/**
+	 * Cierra la conexión a la base de datos.
+	 * 
+	 * @return true si la conexión se cerró correctamente, false en caso contrario.
+	 */
 	public boolean cerrarConexion(){
 		try {
 			conexion.close();
@@ -46,7 +56,7 @@ public class DaoCocheMySql implements DaoCoche {
 		}
 		boolean alta = true;
 		
-		String query = "insert into coche ( matricula, marca, modelo, color) "
+		String query = "insert into coches ( matricula, marca, modelo, color) "
 				+ " values(?,?,?,?)";
 		try {
 			//preparamos la query con valores parametrizables(?)
@@ -81,7 +91,7 @@ public class DaoCocheMySql implements DaoCoche {
 		}
 		
 		boolean borrado = true;
-		String query = "DELETE FROM coche WHERE id = ?";
+		String query = "DELETE FROM coches WHERE id = ?";
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
 			//sustituimos la primera interrgante por la id
@@ -109,7 +119,7 @@ public class DaoCocheMySql implements DaoCoche {
 			return false;
 		}
 		boolean modificado = true;
-		String query = "UPDATE coche SET matricula=?, marca=?, modelo=?, color=? WHERE id=?";
+		String query = "UPDATE coches SET matricula=?, marca=?, modelo=?, color=? WHERE id=?";
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
 			ps.setString(1, c.getMatricula());
@@ -142,7 +152,7 @@ public class DaoCocheMySql implements DaoCoche {
 		}		
 		Coche coche = null;
 		
-		String query = "SELECT id,matricula,marca,modelo,color FROM coche "
+		String query = "SELECT id,matricula,marca,modelo,color FROM coches "
 				+ "WHERE id = ?";
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
@@ -177,7 +187,7 @@ public class DaoCocheMySql implements DaoCoche {
 		}		
 		List<Coche> listaCoches = new ArrayList<>();
 		
-		String query = "SELECT id,matricula, marca,modelo,color FROM coche";
+		String query = "SELECT id,matricula, marca,modelo,color FROM coches";
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
 			

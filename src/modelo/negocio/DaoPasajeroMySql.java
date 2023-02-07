@@ -14,7 +14,11 @@ import modelo.persistencia.interfaces.DaoPasajero;
 public class DaoPasajeroMySql implements DaoPasajero{
 	
 	private Connection conexion;
-	
+	/**
+	 * Abre una conexión a la base de datos.
+	 * 
+	 * @return true si la conexión se abrió correctamente, false en caso contrario.
+	 */
 	public boolean abrirConexion(){
 		String url = "jdbc:mysql://localhost:3306/ae2";
 		String usuario = "root";
@@ -28,6 +32,11 @@ public class DaoPasajeroMySql implements DaoPasajero{
 		}
 		return true;
 	}
+	/**
+	 * Cierra la conexión a la base de datos.
+	 * 
+	 * @return true si la conexión se cerró correctamente, false en caso contrario.
+	 */
 	public boolean cerrarConexion(){
 		try {
 			conexion.close();
@@ -45,8 +54,8 @@ public class DaoPasajeroMySql implements DaoPasajero{
 		}
 		boolean alta = true;
 		
-		String query = "insert into pasajero (nombre, edad, peso, id_coche) "
-				+ " values(?,?,?,?)";
+		String query = "insert into pasajeros (nombre, edad, peso) "
+				+ " values(?,?,?)";
 		try {
 			//preparamos la query con valores parametrizables(?)
 			PreparedStatement ps = conexion.prepareStatement(query);
@@ -54,8 +63,6 @@ public class DaoPasajeroMySql implements DaoPasajero{
 			ps.setString(1, p.getNombre());
 			ps.setInt(2, p.getEdad());
 			ps.setFloat(3, p.getPeso());
-			ps.setInt(4, p.getIdCoche());
-			
 			
 			int numeroFilasAfectadas = ps.executeUpdate();
 			if(numeroFilasAfectadas == 0)
@@ -71,7 +78,6 @@ public class DaoPasajeroMySql implements DaoPasajero{
 		
 		return alta;
 	}
-
 	@Override
 	public boolean deletePasajero(int id) {
 		if(!abrirConexion()){
@@ -79,7 +85,7 @@ public class DaoPasajeroMySql implements DaoPasajero{
 		}
 		
 		boolean borrado = true;
-		String query = "DELETE FROM pasajero WHERE id = ?";
+		String query = "DELETE FROM pasajeros WHERE id = ?";
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
 			//sustituimos la primera interrgante por la id
@@ -108,7 +114,7 @@ public class DaoPasajeroMySql implements DaoPasajero{
 		}		
 		Pasajero pasajero = null;
 		
-		String query = "SELECT id, nombre,edad,peso,id_coche FROM pasajero "
+		String query = "SELECT id, nombre,edad,peso,id_coche FROM pasajeros "
 				+ "WHERE id = ?";
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
@@ -123,16 +129,13 @@ public class DaoPasajeroMySql implements DaoPasajero{
 				pasajero.setPeso(rs.getFloat(4));
 				pasajero.setIdCoche(rs.getInt(5));
 			}
-			//System.out.println(pasajero+"\n");
 		} catch (SQLException e) {
 			System.out.println("obtener -> error al obtener el "
 					+ "coche con id " + id);
 			e.printStackTrace();
 		} finally {
 			cerrarConexion();
-		}
-		
-		
+		}	
 		return pasajero;
 	}
 
@@ -143,7 +146,7 @@ public class DaoPasajeroMySql implements DaoPasajero{
 		}		
 		List<Pasajero> listaPasajeros = new ArrayList<>();
 		
-		String query = "SELECT id, nombre,edad,peso,id_coche FROM pasajero ";
+		String query = "SELECT id, nombre,edad,peso,id_coche FROM pasajeros ";
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
 			
@@ -160,7 +163,6 @@ public class DaoPasajeroMySql implements DaoPasajero{
 				
 				listaPasajeros.add(pasajero);	
 			}
-			//System.out.println(listaPasajeros+"\n");
 		} catch (SQLException e) {
 			System.out.println("listar -> error al obtener los pasajeros");
 			e.printStackTrace();
@@ -178,7 +180,7 @@ public class DaoPasajeroMySql implements DaoPasajero{
 			return false;
 		}
 		boolean agregado = true;
-		String query = "UPDATE pasajero SET id_coche=? WHERE id=?";
+		String query = "UPDATE pasajeros SET id_coche=? WHERE id=?";
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
 			ps.setInt(1, p.getIdCoche());
@@ -187,7 +189,7 @@ public class DaoPasajeroMySql implements DaoPasajero{
 			int numeroFilasAfectadas = ps.executeUpdate();
 			if(numeroFilasAfectadas == 0)
 				agregado = false;
-			System.out.println("El coche modificado: "+ p.toString()+"\n");
+			System.out.println("El pasajero modificado: "+ p.toString()+"\n");
 		} catch (SQLException e) {
 			
 			System.out.println("modificar -> error al modificar el "
@@ -207,11 +209,10 @@ public class DaoPasajeroMySql implements DaoPasajero{
 			return false;
 		}
 		boolean borrado = true;
-		String query = "UPDATE pasajero SET id_coche=? WHERE id=?";
+		String query = "UPDATE pasajeros SET id_coche=NULL WHERE id=?";
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
-			ps.setInt(1, (Integer) null);
-			ps.setInt(2, p.getId());
+			ps.setInt(1, p.getId());
 			
 			int numeroFilasAfectadas = ps.executeUpdate();
 			if(numeroFilasAfectadas == 0)
@@ -221,7 +222,7 @@ public class DaoPasajeroMySql implements DaoPasajero{
 			
 		} catch (SQLException e) {
 			
-			System.out.println("modificar -> error al modificar el "
+			System.out.println("borrar -> error al modificar el "
 					+ " coche " + p);
 			borrado = false;
 			e.printStackTrace();
@@ -234,8 +235,42 @@ public class DaoPasajeroMySql implements DaoPasajero{
 
 	@Override
 	public List<Pasajero> listPasajerosCoche(int idCoche) {
-		// TODO Auto-generated method stub
-		return null;
+		if(!abrirConexion()){
+			return null;
+		}		
+		List<Pasajero> listaPasajeros = new ArrayList<>();
+		
+		String query = "SELECT id, nombre,edad,peso, id_coche FROM pasajeros "
+				+ "WHERE id_coche = ?";
+;
+		try {
+			PreparedStatement ps = conexion.prepareStatement(query);
+			ps.setInt(1, idCoche);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()){
+				Pasajero pasajero = new Pasajero();
+				pasajero = new Pasajero();
+				pasajero.setId(rs.getInt(1));
+				pasajero.setNombre(rs.getString(2));
+				pasajero.setEdad(rs.getInt(3));
+				pasajero.setPeso(rs.getFloat(4));
+				pasajero.setIdCoche(rs.getInt(5));
+				
+				listaPasajeros.add(pasajero);	
+			}
+			System.out.println("Los pasajeros del coche con id: " + idCoche + "\n" );
+		    System.out.println(listaPasajeros+"\n");
+		} catch (SQLException e) {
+			System.out.println("listar -> error al obtener los pasajeros");
+			e.printStackTrace();
+		} finally {
+			cerrarConexion();
+		}
+		
+		
+		return listaPasajeros;
 	}
 
 }
