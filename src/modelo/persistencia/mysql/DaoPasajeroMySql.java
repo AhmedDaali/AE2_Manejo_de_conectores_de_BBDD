@@ -1,4 +1,4 @@
-package modelo.negocio;
+package modelo.persistencia.mysql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 
 import modelo.entidad.Coche;
 import modelo.entidad.Pasajero;
@@ -26,6 +28,8 @@ public class DaoPasajeroMySql implements DaoPasajero{
 		String password = "";
 		try {
 			conexion = DriverManager.getConnection(url,usuario,password);
+		}catch(CommunicationsException ce) {
+			System.out.println("No hay conexión con la base de datos" );	
 		} catch (SQLException e) {
 			
 			e.printStackTrace();

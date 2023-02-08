@@ -1,4 +1,4 @@
-package modelo.negocio;
+package modelo.persistencia.mysql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 
 import modelo.entidad.Coche;
 import modelo.persistencia.interfaces.DaoCoche;
@@ -27,6 +29,8 @@ public class DaoCocheMySql implements DaoCoche {
 		String password = "";
 		try {
 			conexion = DriverManager.getConnection(url,usuario,password);
+		}catch(CommunicationsException ce) {
+			System.out.println("No hay conexión con la base de datos" );
 		} catch (SQLException e) {
 			
 			e.printStackTrace();
@@ -61,7 +65,7 @@ public class DaoCocheMySql implements DaoCoche {
 		try {
 			//preparamos la query con valores parametrizables(?)
 			PreparedStatement ps = conexion.prepareStatement(query);
-			//ps.setInt(1, c.getId());
+			
 			ps.setString(1, c.getMatricula());
 			ps.setString(2, c.getMarca());
 			ps.setString(3, c.getModelo());
