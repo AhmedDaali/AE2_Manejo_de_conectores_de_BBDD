@@ -1,12 +1,24 @@
 package vista;
 
 import java.util.Scanner;
+
 import modelo.negocio.GestorCoches;
 import modelo.persistencia.interfaces.DaoCoche;
 import modelo.persistencia.mysql.DaoCocheMySql;
 
+/**
+ * Aplicación que permite gestionar coches y pasajeros.
+ * @author Grupo 5
+ */
 public class Aplicacion {
-
+	
+	/**
+	 * Método principal que muestra el menú principal y
+	 *  permite al usuario elegir la opción que desea realizar.
+	 * @throws Exception En caso de error en la conexión.
+	 * @throws NumberFormatException en caso de que el usuario 
+	 * insertar otro dato que no sea un entero.
+	 */
 	public static void main(String[] args)throws Exception  {
 		
         boolean continuar = true;
@@ -22,8 +34,7 @@ public class Aplicacion {
 				System.out.println("5.Listado de coches\n");
 				System.out.println("6.Gestión de pasajeros\n");
 				System.out.println("7.Terminar el programa\n");
-				
-				
+					
 				DaoCoche dc = new DaoCocheMySql();
 				MenuPasajero menuPas = new MenuPasajero();
 				GestorCoches gc = new GestorCoches();

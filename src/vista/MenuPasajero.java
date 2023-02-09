@@ -6,8 +6,21 @@ import modelo.negocio.GestorPasajeros;
 import modelo.persistencia.interfaces.DaoPasajero;
 import modelo.persistencia.mysql.DaoPasajeroMySql;
 
+/**
+ * Aplicación MenuPasajero permite gestionar pasajeros.
+ * @author Grupo 5
+ *
+ */
 public class MenuPasajero {
 	
+	/**
+	 * Método que muestra el menú principal y
+	 *  permite al usuario elegir la opción que desea realizar.
+
+	 * @throws Exception En caso de error en la conexión.
+	 * @throws NumberFormatException en caso de que el usuario 
+	 * insertar otro dato que no sea un entero.
+	 */
 	public void menu()throws Exception  {
 		
 		boolean continuarPas = true;
@@ -68,6 +81,8 @@ public class MenuPasajero {
 							break;
 							
 						case 8:
+							//Si la elección es ocho la varible continuarPas apunta a false y sale de bucle
+							// volviendo al menú de la aplicacion principal.
 							continuarPas=false;
 						    break;
 						}
@@ -77,7 +92,6 @@ public class MenuPasajero {
 			    }	
 		    }while(continuarPas);
         
-	   //Recogemos las excepciones con el 'catch'.
 	   }catch (Exception e) {
 		   System.out.println("Error en la conexion");
 		   e.printStackTrace();
