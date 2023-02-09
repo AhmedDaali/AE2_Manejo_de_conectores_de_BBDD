@@ -1,5 +1,13 @@
 package modelo.entidad;
 
+/**
+ * La clase Pasajero representa un pasajero con atributos como id un identificador único, 
+ * el nombre, la edad, el peso y idCoche un identificador único del coche.
+ *
+ * @author Grupo5
+ * @version 1.0
+ * @since 2023
+ */
 public class Pasajero {
 	
 	private int id;
@@ -9,6 +17,15 @@ public class Pasajero {
 	private int idCoche;
 	private Coche coche;
 	
+	/**
+	 * Constructor que recibe todos los atributos de la clase Pasajero.
+	 *
+	 * @param id Identificador único del pasajero
+	 * @param nombre Nombre del pasajero
+	 * @param edad Edad del pasajero
+	 * @param peso Peso del pasajero
+	 * @param idCoche Identificador único del coche
+	 */
 	public Pasajero(int id, String nombre, int edad, float peso, int idCoche) {
 		super();
 		this.id = id;
@@ -17,6 +34,9 @@ public class Pasajero {
 		this.peso = peso;
 		this.idCoche = idCoche;
 	}
+	/**
+	 * Constructor vacio de la clase Pasajero.
+	 */
 	public Pasajero() {
 		
 	}

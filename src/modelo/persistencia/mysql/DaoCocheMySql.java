@@ -24,10 +24,13 @@ public class DaoCocheMySql implements DaoCoche {
 	 * @return true si la conexión se abrió correctamente, false en caso contrario.
 	 */
 	public boolean abrirConexion(){
+		
+		// Paso 1: Establecemos los parametros de conexión con la base de datos
 		String url = "jdbc:mysql://localhost:3306/ae2";
 		String usuario = "root";
 		String password = "";
 		try {
+			// Paso 2: Interactuar con la BD
 			conexion = DriverManager.getConnection(url,usuario,password);
 		}catch(CommunicationsException ce) {
 			System.out.println("No hay conexión con la base de datos" );
@@ -46,6 +49,8 @@ public class DaoCocheMySql implements DaoCoche {
 	public boolean cerrarConexion(){
 		try {
 			conexion.close();
+		}catch (NullPointerException ne){
+			System.out.println("No se pudo cerrar la conexión");	
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
@@ -55,15 +60,27 @@ public class DaoCocheMySql implements DaoCoche {
 
 	@Override
 	public boolean addCoche(Coche c) {
+		//Primero, se llama al método "abrirConexion()".
+		//Este método se encarga de establecer 
+		//una conexión con la base de datos.
+		//Si la conexión no se puede abrir, se devuelve "null".
 		if(!abrirConexion()){
 			return false;
 		}
+		//Se crea una variable "alta" que se inicializa en true. 
+		//Esta variable se utilizará para indicar si 
+		//el alta se realizó correctamente o no.
 		boolean alta = true;
-		
+		//Se crea una variable "query" que contiene
+		//una consulta SQL que selecciona
+		//todos los campos de la tabla "coches" menos id que 
+		//se generará automáticamente en la base de datos.
 		String query = "insert into coches ( matricula, marca, modelo, color) "
 				+ " values(?,?,?,?)";
 		try {
-			//preparamos la query con valores parametrizables(?)
+			//Se prepara la query con valores parametrizables (?)
+			//para los campos matricula, marca, modelo y 
+			//color del objeto "Coche".
 			PreparedStatement ps = conexion.prepareStatement(query);
 			
 			ps.setString(1, c.getMatricula());
@@ -71,7 +88,11 @@ public class DaoCocheMySql implements DaoCoche {
 			ps.setString(3, c.getModelo());
 			ps.setString(4, c.getColor());
 			
-			
+			//Se ejecuta la query con el método "executeUpdate()".
+			//Este método devuelve el número de filas afectadas
+			//por la consulta. Si el número de filas afectadas es 0,
+			//significa que la inserción no se realizó correctamente y 
+			//se establece "alta" en false.
 			int numeroFilasAfectadas = ps.executeUpdate();
 			if(numeroFilasAfectadas == 0)
 				alta = false;
@@ -80,10 +101,12 @@ public class DaoCocheMySql implements DaoCoche {
 			System.out.println("alta -> Error al insertar: " + c);
 			alta = false;
 			e.printStackTrace();
+	    //Se cierra la conexión con la base de datos mediante
+		//el método "cerrarConexion()".		
 		} finally{
 			cerrarConexion();
 		}
-		
+		//Finalmente, se devuelve el valor de "alta".
 		return alta;
 		
 	}
@@ -95,12 +118,22 @@ public class DaoCocheMySql implements DaoCoche {
 		}
 		
 		boolean borrado = true;
+		//Se crea una variable "query" que contiene una consulta SQL 
+		//para borrar un registro de la tabla "coches"
+		//con un "id" específico.
 		String query = "DELETE FROM coches WHERE id = ?";
 		try {
+			//Se prepara la consulta "query" para que pueda ser ejecutada,
+			//utilizando el método "prepareStatement". 
+			//Se utiliza un valor parametrizable "?" para especificar
+			//el "id" del registro a borrar.
 			PreparedStatement ps = conexion.prepareStatement(query);
-			//sustituimos la primera interrgante por la id
+			//Se asigna el valor del "id" del registro a borrar al valor
+			//parametrizable en la consulta, utilizando el método "setInt".
 			ps.setInt(1, id);
-			
+			//Se ejecuta la consulta "query" utilizando el método "executeUpdate",
+			//que devuelve el número de filas afectadas por la consulta.
+			//Si no se borra ninguna fila, se establece "borrado" a "false".
 			int numeroFilasAfectadas = ps.executeUpdate();
 			if(numeroFilasAfectadas == 0)
 				borrado = false;
@@ -151,18 +184,32 @@ public class DaoCocheMySql implements DaoCoche {
 
 	@Override
 	public Coche obtenerCoche(int id) {
+		//Primero, se llama al método "abrirConexion()".
+		//Este método se encarga de establecer una conexión con la base de datos.
+		//Si la conexión no se puede abrir, se devuelve "null".
 		if(!abrirConexion()){
 			return null;
 		}		
 		Coche coche = null;
-		
+		//Se crea una variable "query" que contiene una consulta SQL que selecciona
+		//todos los campos de la tabla "coches" cuyo id sea igual 
+		//al id proporcionado como argumento.
 		String query = "SELECT id,matricula,marca,modelo,color FROM coches "
 				+ "WHERE id = ?";
 		try {
+			//Se crea un objeto "PreparedStatement" llamado "ps" que utiliza
+			//la conexión y la consulta SQL para crear una consulta parametrizada.
 			PreparedStatement ps = conexion.prepareStatement(query);
-			ps.setInt(1, id);
 			
+			//Se establece el valor del parámetro de la consulta utilizando el método "setInt"
+			//y se ejecuta la consulta mediante el método "executeQuery". 
+			//El resultado se almacena en un objeto "ResultSet".
+			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
+			
+			// Se entra en un bucle "while" que se ejecuta mientras haya más resultados en el "ResultSet".
+            //Dentro del bucle, se crea un objeto "Coche" y se le asignan los valores de cada 
+			//uno de los campos recuperados de la base de datos.
 			while(rs.next()){
 				coche = new Coche();
 				coche.setId(rs.getInt(1));
@@ -171,16 +218,18 @@ public class DaoCocheMySql implements DaoCoche {
 				coche.setModelo(rs.getString(4));
 				coche.setColor(rs.getString(5));
 			}
-			//System.out.println(coche+"\n");
+			
 		} catch (SQLException e) {
 			System.out.println("obtener -> error al obtener el "
 					+ "coche con id " + id);
 			e.printStackTrace();
+	    //Finalmente, dentro del bloque finally, se llama al método "cerrarConexion()"
+		//para cerrar la conexión con la base de datos.
 		} finally {
 			cerrarConexion();
 		}
 		
-		
+		//Después de salir del bloque finally, se devuelve el objeto "Coche" obtenido.
 		return coche;
 	}
 

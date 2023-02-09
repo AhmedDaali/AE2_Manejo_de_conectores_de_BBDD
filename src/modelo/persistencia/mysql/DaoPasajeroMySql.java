@@ -45,7 +45,9 @@ public class DaoPasajeroMySql implements DaoPasajero{
 	public boolean cerrarConexion(){
 		try {
 			conexion.close();
-		} catch (SQLException e) {
+		}catch (NullPointerException ne){
+			System.out.println("No se pudo cerrar la conexión");
+		}catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -62,7 +64,6 @@ public class DaoPasajeroMySql implements DaoPasajero{
 		String query = "insert into pasajeros (nombre, edad, peso) "
 				+ " values(?,?,?)";
 		try {
-			//preparamos la query con valores parametrizables(?)
 			PreparedStatement ps = conexion.prepareStatement(query);
 			
 			ps.setString(1, p.getNombre());
@@ -93,7 +94,6 @@ public class DaoPasajeroMySql implements DaoPasajero{
 		String query = "DELETE FROM pasajeros WHERE id = ?";
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
-			//sustituimos la primera interrgante por la id
 			ps.setInt(1, id);
 			
 			int numeroFilasAfectadas = ps.executeUpdate();
@@ -125,6 +125,11 @@ public class DaoPasajeroMySql implements DaoPasajero{
 			PreparedStatement ps = conexion.prepareStatement(query);
 			ps.setInt(1, id);
 			
+			//ResulSet: Una tabla de datos que representa un conjunto de resultados de una base de datos,
+			//que generalmente se genera al ejecutar una instrucción que consulta la base de datos.
+			
+			//executeQuery: Ejecuta la consulta SQL en este objeto PreparedStatement y
+			//devuelve el objeto ResultSet generado por la consulta.
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				pasajero = new Pasajero();
