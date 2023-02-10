@@ -8,15 +8,15 @@ import modelo.persistencia.mysql.DaoPasajeroMySql;
 
 /**
  * Aplicación MenuPasajero permite gestionar pasajeros.
+ * @version 1.0
+ * @since 2023
  * @author Grupo 5
- *
  */
 public class MenuPasajero {
 	
 	/**
 	 * Método que muestra el menú principal y
 	 *  permite al usuario elegir la opción que desea realizar.
-
 	 * @throws Exception En caso de error en la conexión.
 	 * @throws NumberFormatException en caso de que el usuario 
 	 * insertar otro dato que no sea un entero.

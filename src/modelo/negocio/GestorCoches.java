@@ -7,10 +7,10 @@ import modelo.persistencia.interfaces.DaoCoche;
 import modelo.persistencia.mysql.DaoCocheMySql;
 
 /**
- * Clase 
+ * Clase actuara de interlocutora entre la base de datos y la aplicación.
  * @author Grupo5
  * @version 1.0
- * @since 202
+ * @since 2023
  */
 public class GestorCoches {
 	
