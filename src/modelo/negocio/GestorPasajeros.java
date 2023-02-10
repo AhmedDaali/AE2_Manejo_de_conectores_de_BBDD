@@ -8,6 +8,12 @@ import modelo.persistencia.interfaces.DaoPasajero;
 import modelo.persistencia.mysql.DaoCocheMySql;
 import modelo.persistencia.mysql.DaoPasajeroMySql;
 
+/**
+ * Clase actuara de interlocutora entre la base de datos y la aplicación. 
+ * @author Grupo5
+ * @version 1.0
+ * @since 2023
+ */
 public class GestorPasajeros {
 	
 	Scanner sc = new Scanner(System.in);

@@ -14,6 +14,13 @@ import modelo.entidad.Coche;
 import modelo.entidad.Pasajero;
 import modelo.persistencia.interfaces.DaoPasajero;
 
+/**
+ * Clase implementa la interfaz DaoPasajero y 
+ * a la vez conecta con la base de datos
+ * @author Grupo5
+ * @version 1.0
+ * @since 2023
+ */
 public class DaoPasajeroMySql implements DaoPasajero{
 	
 	private Connection conexion;

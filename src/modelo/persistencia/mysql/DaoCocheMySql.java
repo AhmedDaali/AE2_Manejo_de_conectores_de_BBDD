@@ -13,6 +13,13 @@ import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 import modelo.entidad.Coche;
 import modelo.persistencia.interfaces.DaoCoche;
 
+/**
+ * Clase implementa la interfaz DaoCoche y 
+ * a la vez conecta con la base de datos
+ * @author Grupo5
+ * @version 1.0
+ * @since 2023
+ */
 public class DaoCocheMySql implements DaoCoche {
 
 

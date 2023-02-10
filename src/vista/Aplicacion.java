@@ -9,6 +9,8 @@ import modelo.persistencia.mysql.DaoCocheMySql;
 /**
  * Aplicación que permite gestionar coches y pasajeros.
  * @author Grupo 5
+ * @version 1.0
+ * @since2023
  */
 public class Aplicacion {
 	

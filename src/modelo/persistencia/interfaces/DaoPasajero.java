@@ -3,6 +3,13 @@ package modelo.persistencia.interfaces;
 import java.util.List;
 import modelo.entidad.Pasajero;
 
+/**
+ * Interfaz usada para especificar los métodos  que tienen
+ *  que gestionar los pasajeros.
+ * @author Grupo5
+ * @version 1.0
+ * @since 2023
+ */
 public interface DaoPasajero {
 	
 	/**
