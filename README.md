@@ -1,5 +1,7 @@
 # AE2_Manejo_de_conectores_de_BBDD.
 
+-English: It is a Java application to manage cars and passengers that connects to a MySql database.
+
 Es una aplicación Java para gestionar coches y pasajeros que conecta con una base de datos MySql.
 
 Este es una tarea realizada para el ciclo formativo grado superior de Desarrollo de Aplicaciones Multiplataforma.
